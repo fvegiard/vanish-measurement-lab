@@ -3,7 +3,7 @@
   "description": "JSON graph tracking the Vanish project: nodes = decisions/components/findings/tasks, edges = dependencies. Machine-readable counterpart to the README (human side follows Karpathy's append-and-review style).",
   "nodes": [
     { "id": "decision-architecture", "type": "decision", "label": "Electron + TypeScript wins", "status": "decided", "data": { "score": 89.0, "methods": ["weighted-sum", "topsis-rubric", "topsis-equal", "ahp-rubric", "ahp-equal"], "runner_up": "hybrid 85.5", "rejected": "extension+dc 66.0" } },
-    { "id": "decision-distribution", "type": "decision", "label": "Portable vs NSIS unresolved", "status": "open", "data": { "question": "portable re-extracts 189MB every launch (11.2s); NSIS installs fast but leaves traces the product itself must remove" } },
+    { "id": "decision-distribution", "type": "decision", "label": "Dir target + zip wins (unzip-and-run)", "status": "decided", "data": { "choice": "electron-builder dir target -> zip 155.3MB", "why": "no installer traces, no 11.2s re-extraction (portable's measured flaw), no uninstall entry, zero trace by construction", "measured": "launch from extracted copy 1099-1318ms vs portable 11.2s (9x)" } },
     { "id": "component-core", "type": "component", "label": "Vanish core (Electron main)", "status": "planned", "data": { "role": "fs/registry/services/tasks, scan + delete engine" } },
     { "id": "component-native-host", "type": "component", "label": "Self-deleting native host", "status": "probe-proven", "data": { "pattern": "register HKCU -> work -> unregister -> self-delete = zero trace", "evidence": "probe Test B: real file deleted, verified gone" } },
     { "id": "component-extension", "type": "component", "label": "Optional browser sidekick", "status": "deferred", "data": { "reason": "extension alone cannot reach OS (probe Test A); CWS review weeks for nativeMessaging" } },
@@ -12,7 +12,11 @@
     { "id": "finding-correction-loop", "type": "finding", "label": "Electron correction cycle 1.71s", "status": "measured", "data": { "detect_ms": 282, "fix_verify_ms": 267, "requirement": "process.on('uncaughtException') streams errors, no modal dialog" } },
     { "id": "finding-loadunpacked", "type": "finding", "label": "Extensions.loadUnpacked CDP (Chrome 126+)", "status": "verified", "data": { "use": "AI iteration loop for any extension sidekick; no --load-extension flag" } },
     { "id": "finding-karpathy", "type": "finding", "label": "Karpathy 2026: LLM Wiki pattern (markdown graph, not JSON)", "status": "verified", "data": { "sources": ["karpathy.bearblog.dev/sequoia-ascent-2026 (2026-04-30)", "gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"], "pattern": "persistent markdown wiki: entity pages + cross-links + index.md + append-only log.md; graph viewed in Obsidian graph view; lint passes for orphans/contradictions", "quote": "Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase" } },
-    { "id": "task-build-app", "type": "task", "label": "Build Vanish app", "status": "pending" },
+    { "id": "task-build-app", "type": "task", "label": "Build Vanish app", "status": "done", "data": { "version": "0.1.0", "repo": "github.com/fvegiard/vanish (1d31c33)", "measured": { "full_scan_ms": 941, "launch_ms": [1170, 1133, 1241], "zip_mb": 155.3, "asar_mb": 0.01 }, "proof": "fixture findings detected+deleted+verified; real-PC scan 0 findings (correct); zero-trace verified (temp/appdata/registry)" } },
+    { "id": "finding-batched-reg", "type": "finding", "label": "Batched reg query /s = 7.4x scan speedup", "status": "measured", "data": { "before_ms": 6926, "after_ms": 941, "cause": "one recursive query per hive root vs one spawn per subkey (~7s)" } },
+    { "id": "finding-self-packing", "type": "finding", "label": "electron-builder recursive self-packing footgun", "status": "fixed", "data": { "bug": "'files': ['dist/**/*'] packs previous build's win-unpacked into app.asar (367.6MB)", "fix": "explicit files list ['dist/main.js','dist/preload.js','package.json'] + delete stale win-unpacked before rebuild", "result": "asar 0.01MB" } },
+    { "id": "finding-stale-sweep", "type": "finding", "label": "Force-kill leaves run-dir; startup sweep self-heals", "status": "fixed", "data": { "bug": "Stop-Process -Force skips will-quit -> vanish-run-<pid> dir left in %TEMP%", "fix": "sweepStaleRuns() at startup: rm vanish-run-* dirs whose PID is dead", "verified": "STALE-DIRS-AFTER: 0" } },
+    { "id": "finding-desktop-pollution", "type": "finding", "label": "Agent must never surface UI on the user's desktop", "status": "lesson", "data": { "hit": "'& node_modules\\esbuild\\bin\\esbuild' ShellExecuted the extensionless shim -> Windows 'choose an app' popup on user's desktop (2026-10-10)", "rule": "every command runs on the user's machine; anything that can surface a dialog/window/sound is pollution = bug; resolve real .exe binaries only", "karpathy": "the agent's value is being the disciplined one - 'LLMs don't get bored, don't forget'" } },
     { "id": "task-trace-model", "type": "task", "label": "Design per-app trace model (app -> files -> registry -> services graph)", "status": "pending" },
     { "id": "task-cleanup-demo", "type": "task", "label": "Copilot version-cache cleanup", "status": "done", "data": { "reclaimed_mb": 1013.6, "kept": "1.0.94-3 (running)" } }
   ],
@@ -26,6 +30,10 @@
     { "from": "component-extension", "to": "finding-loadunpacked", "type": "dev_loop_uses" },
     { "from": "decision-distribution", "to": "finding-portable-reextract", "type": "informed_by" },
     { "from": "decision-architecture", "to": "finding-karpathy", "type": "informed_by" },
+    { "from": "task-build-app", "to": "finding-batched-reg", "type": "produced" },
+    { "from": "task-build-app", "to": "finding-self-packing", "type": "produced" },
+    { "from": "task-build-app", "to": "finding-stale-sweep", "type": "produced" },
+    { "from": "task-build-app", "to": "finding-desktop-pollution", "type": "produced" },
     { "from": "task-trace-model", "to": "component-core", "type": "feeds" }
   ]
 }

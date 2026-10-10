@@ -13,3 +13,10 @@ All batteries complete. 5 scoring methods unanimous: Electron 89.0 > Hybrid 85.5
 
 ## [2026-10-09] measurement | Portable launch re-extraction
 Portable exe launch measured 11208/11193/11157 ms — re-extracts 189MB payload to %TEMP% every run. Informs decision-distribution.
+## [2026-10-10] build | Vanish v0.1 built, measured, pushed
+- App repo: github.com/fvegiard/vanish (1d31c33, 7 files)
+- Measured: full scan 941ms (batched reg query, 7.4x), packaged launch 1.1-1.3s (9x vs portable), zip 155.3MB, asar 0.01MB
+- Proof: fixture findings detected+deleted+verified; real-PC scan 0 (correct); zero-trace verified
+- Fixed: recursive self-packing (asar 367.6->0.01MB), stale run-dir sweep at startup
+- Lesson: agent must never surface UI on the user's desktop (esbuild ShellExecute popup hit)
+- Distribution decided: dir target + zip (unzip-and-run), no installer, zero trace by construction
