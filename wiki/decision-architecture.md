@@ -12,8 +12,8 @@
 
 ## Links out
 
-- [[decision-architecture]] (depends_on)
+- [[finding-karpathy]] (informed_by)
 
 ## Links in
 
-- [[decision-architecture]] (informed_by)
+- [[task-build-app]] (depends_on)

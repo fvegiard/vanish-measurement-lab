@@ -9,8 +9,8 @@
 
 ## Links out
 
-- [[component-extension]] (enables)
+- [[finding-loadunpacked]] (dev_loop_uses)
 
 ## Links in
 
-- [[component-extension]] (dev_loop_uses)
+- [[component-native-host]] (enables)

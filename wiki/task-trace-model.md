@@ -3,6 +3,6 @@
 - **type:** task
 - **status:** pending
 
-## Links in
+## Links out
 
-- [[task-trace-model]] (feeds)
+- [[component-core]] (feeds)

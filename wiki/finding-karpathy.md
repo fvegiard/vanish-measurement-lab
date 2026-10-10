@@ -1,14 +1,16 @@
-# Karpathy 2026: LLM Wiki pattern (markdown graph, not JSON)
+# Karpathy: LLM Wiki + coding style (90-day freshness rule)
 
 - **type:** finding
 - **status:** verified
 
 ## Data
 
-- **sources:** ["karpathy.bearblog.dev/sequoia-ascent-2026 (2026-04-30)","gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"]
-- **pattern:** persistent markdown wiki: entity pages + cross-links + index.md + append-only log.md; graph viewed in Obsidian graph view; lint passes for orphans/contradictions
-- **quote:** Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase
+- **freshness_rule:** never reference anything older than 90 days (user rule 2026-10-09; cutoff 2026-07-11)
+- **living_sources:** ["gist 442a6bf5 llm-wiki (updated 2026-10-10, 1137 comments, 0 replies by karpathy)","gist fb64880b HELLO.md (updated 2026-10-09)"]
+- **newest_code:** nanochat pushed 2026-09-07 (33d); latest commits 2026-07-03 (98d - nothing newer exists, reported honestly)
+- **style_from_commit_log:** ["unify duplicates into one impl to prevent drift bugs","nuke giant dependency footprints; delete don't deprecate","clean up fragile code; harden the sandbox","add tests + benchmarks for everything"]
+- **community_practice_sep2026:** ["shared memory layer via MCP (Cortex pattern)","git-native rationale anchoring with CI attestation (Repocodex)"]
 
-## Links out
+## Links in
 
-- [[finding-karpathy]] (informed_by)
+- [[decision-architecture]] (informed_by)

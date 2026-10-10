@@ -8,6 +8,6 @@
 - **pattern:** register HKCU -> work -> unregister -> self-delete = zero trace
 - **evidence:** probe Test B: real file deleted, verified gone
 
-## Links in
+## Links out
 
-- [[component-native-host]] (enables)
+- [[component-extension]] (enables)

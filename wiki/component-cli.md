@@ -7,6 +7,6 @@
 
 - **principle:** Karpathy: 'Don't ask a developer to visit, look, or click'
 
-## Links out
+## Links in
 
-- [[component-cli]] (creates)
+- [[task-build-app]] (creates)

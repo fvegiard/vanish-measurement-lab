@@ -6,8 +6,8 @@ const g = require(path.join(__dirname, '..', 'graph.json'));
 const wikiDir = path.join(__dirname, '..', 'wiki');
 
 for (const n of g.nodes) {
-  const out = g.edges.filter(e => e.to === n.id);
-  const inc = g.edges.filter(e => e.from === n.id);
+  const out = g.edges.filter(e => e.from === n.id);
+  const inc = g.edges.filter(e => e.to === n.id);
   let md = `# ${n.label}\n\n- **type:** ${n.type}\n- **status:** ${n.status}\n`;
   if (n.data) {
     md += `\n## Data\n\n`;

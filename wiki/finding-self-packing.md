@@ -9,6 +9,6 @@
 - **fix:** explicit files list ['dist/main.js','dist/preload.js','package.json'] + delete stale win-unpacked before rebuild
 - **result:** asar 0.01MB
 
-## Links out
+## Links in
 
-- [[finding-self-packing]] (produced)
+- [[task-build-app]] (produced)

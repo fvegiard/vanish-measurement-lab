@@ -20,3 +20,10 @@ Portable exe launch measured 11208/11193/11157 ms — re-extracts 189MB payload 
 - Fixed: recursive self-packing (asar 367.6->0.01MB), stale run-dir sweep at startup
 - Lesson: agent must never surface UI on the user's desktop (esbuild ShellExecute popup hit)
 - Distribution decided: dir target + zip (unzip-and-run), no installer, zero trace by construction
+
+## [2026-10-09] lint | Wiki lint pass: orphan linked, index completed
+Regenerated all 18 pages from graph.json (finding-fetch-errors page was missing). index.md now lists all 18 nodes; 2 stale summaries corrected (decision-distribution -> decided dir+zip, task-build-app -> done v0.1). Orphan task-cleanup-demo linked to component-core (cross_validates): the manual Copilot-cache cleanup is the ground truth the real-PC scan's 0-finding result was checked against.
+
+## [2026-10-10] lint | Maintenance pass
+- Ingested Karpathy style from nanochat commit log + living gists; 90-day freshness rule applied; fetch errors root-caused (events API control-test, REST over HTML, gh --slurp)
+- Run by karpathy-loop dynamic workflow

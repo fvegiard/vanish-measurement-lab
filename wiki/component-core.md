@@ -9,9 +9,10 @@
 
 ## Links out
 
-- [[component-core]] (creates)
-- [[component-core]] (feeds)
+- [[finding-correction-loop]] (must_respect)
 
 ## Links in
 
-- [[component-core]] (must_respect)
+- [[task-build-app]] (creates)
+- [[task-trace-model]] (feeds)
+- [[task-cleanup-demo]] (cross_validates)

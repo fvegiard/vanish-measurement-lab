@@ -9,6 +9,6 @@
 - **fix:** sweepStaleRuns() at startup: rm vanish-run-* dirs whose PID is dead
 - **verified:** STALE-DIRS-AFTER: 0
 
-## Links out
+## Links in
 
-- [[finding-stale-sweep]] (produced)
+- [[task-build-app]] (produced)

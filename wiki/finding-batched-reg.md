@@ -9,6 +9,6 @@
 - **after_ms:** 941
 - **cause:** one recursive query per hive root vs one spawn per subkey (~7s)
 
-## Links out
+## Links in
 
-- [[finding-batched-reg]] (produced)
+- [[task-build-app]] (produced)

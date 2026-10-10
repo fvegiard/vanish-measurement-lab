@@ -9,6 +9,6 @@
 - **rule:** every command runs on the user's machine; anything that can surface a dialog/window/sound is pollution = bug; resolve real .exe binaries only
 - **karpathy:** the agent's value is being the disciplined one - 'LLMs don't get bored, don't forget'
 
-## Links out
+## Links in
 
-- [[finding-desktop-pollution]] (produced)
+- [[task-build-app]] (produced)

@@ -11,8 +11,8 @@
 
 ## Links out
 
-- [[decision-distribution]] (depends_on)
+- [[finding-portable-reextract]] (informed_by)
 
 ## Links in
 
-- [[decision-distribution]] (informed_by)
+- [[task-build-app]] (depends_on)

@@ -9,6 +9,6 @@
 - **fix_verify_ms:** 267
 - **requirement:** process.on('uncaughtException') streams errors, no modal dialog
 
-## Links out
+## Links in
 
-- [[finding-correction-loop]] (must_respect)
+- [[component-core]] (must_respect)
