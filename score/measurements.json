@@ -1,0 +1,74 @@
+{
+  "measurements": {
+    "electron_cold_start_ms": { "runs": [150, 171, 149], "median": 150, "how": "app.whenReady -> did-finish-load, minimal window, 3 runs" },
+    "electron_ram_mb": { "main_rss": [95, 97, 93], "total_all_processes": [333, 328, 325], "how": "Get-Process WorkingSet64 sum while app alive" },
+    "extension_verify_loop_ms": { "value": 763, "how": "CDP: open probe tab -> extension runs -> native host deletes real file -> result rendered; headless, browser already running" },
+    "extension_direct_os_capability": { "value": "none", "how": "probe Test A: no chrome.* API reaches fs/registry/processes; OPFS is sandboxed virtual FS" },
+    "extension_via_native_bridge": { "value": "full OS reach", "how": "probe Test B: real file deleted via native messaging host, independently verified gone" },
+    "native_host_install_cost": { "value": "3 HKCU reg keys + 1 manifest + 2 host files, no admin; cleanup = delete keys + files (demonstrated, zero trace)" },
+    "dc_remote_mcp": { "tier": "beta", "free": "10,000 tool calls/month", "pro": "$20/mo", "sandbox": "NOT a sandbox per its own SECURITY.md (July 2026); guardrails advisory" },
+    "cws_review": { "value": "up to weeks for sensitive permissions (nativeMessaging); --load-extension removed from Chrome stable since 137" }
+  },
+  "scores": {
+    "electron": {
+      "capability": 100,
+      "install_friction": 90,
+      "reliability": 90,
+      "ai_iteration": 90,
+      "dev_effort": 80,
+      "distribution": 75,
+      "footprint": 60,
+      "cost": 100,
+      "evidence": {
+        "capability": "Node main process: fs, registry, services, scheduled tasks natively; self-delete pattern probe-proven",
+        "install_friction": "1 step: download + run; SmartScreen warning on unsigned exe is the only friction",
+        "reliability": "zero external dependencies; no browser/network/service needed",
+        "ai_iteration": "measured cold start 150ms -> edit+restart+verify ~2-4s; HMR available",
+        "dev_effort": "one codebase, electron-builder; packaging+signing is days",
+        "distribution": "direct download, no store review; signing cert ~$100-500/yr; AV FP risk for uninstaller-like exes",
+        "footprint": "measured 330MB RAM total, ~250MB disk",
+        "cost": "free, no service dependency"
+      }
+    },
+    "hybrid": {
+      "capability": 100,
+      "install_friction": 85,
+      "reliability": 85,
+      "ai_iteration": 95,
+      "dev_effort": 60,
+      "distribution": 70,
+      "footprint": 60,
+      "cost": 95,
+      "evidence": {
+        "capability": "Electron core does the job; extension is optional sidekick",
+        "install_friction": "same single-step install; extension optional",
+        "reliability": "product never depends on the extension working",
+        "ai_iteration": "both loops measured: extension 763ms + electron 150ms restart",
+        "dev_effort": "two surfaces to build and keep in sync",
+        "distribution": "electron direct + extension optional (store review only if shipped)",
+        "footprint": "same as electron when extension idle",
+        "cost": "free core; AI costs identical across all three"
+      }
+    },
+    "extension_dc": {
+      "capability": 95,
+      "install_friction": 40,
+      "reliability": 45,
+      "ai_iteration": 95,
+      "dev_effort": 50,
+      "distribution": 30,
+      "footprint": 85,
+      "cost": 60,
+      "evidence": {
+        "capability": "DC runs PowerShell = full OS reach, but gated on DC service availability + auth",
+        "install_friction": "extension install (dev-mode warning or CWS review) + DC account/auth or local DC install + native host registration",
+        "reliability": "browser must run; DC remote is BETA with 10k calls/mo cap; network+auth deps; DC is NOT a sandbox per its own SECURITY.md",
+        "ai_iteration": "measured 763ms verify loop, no app restart needed",
+        "dev_effort": "three moving parts (extension + bridge + cloud AI glue) + auth flow",
+        "distribution": "CWS review up to weeks for nativeMessaging; unpacked = dev-mode banner; enterprise policy can block",
+        "footprint": "reuses the browser the user already runs; host is tiny",
+        "cost": "DC remote free 10k calls/mo, Pro $20/mo; local DC free but reintroduces install friction"
+      }
+    }
+  }
+}

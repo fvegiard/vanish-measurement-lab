@@ -1,0 +1,240 @@
+{
+  "rubric_version": 1,
+  "product": "zero-trace uninstaller for vibe coders (one icon, click, app never existed)",
+  "measurements": {
+    "electron_cold_start_ms": {
+      "runs": [
+        150,
+        171,
+        149
+      ],
+      "median": 150,
+      "how": "app.whenReady -> did-finish-load, minimal window, 3 runs"
+    },
+    "electron_ram_mb": {
+      "main_rss": [
+        95,
+        97,
+        93
+      ],
+      "total_all_processes": [
+        333,
+        328,
+        325
+      ],
+      "how": "Get-Process WorkingSet64 sum while app alive"
+    },
+    "extension_verify_loop_ms": {
+      "value": 763,
+      "how": "CDP: open probe tab -> extension runs -> native host deletes real file -> result rendered; headless, browser already running"
+    },
+    "extension_direct_os_capability": {
+      "value": "none",
+      "how": "probe Test A: no chrome.* API reaches fs/registry/processes; OPFS is sandboxed virtual FS"
+    },
+    "extension_via_native_bridge": {
+      "value": "full OS reach",
+      "how": "probe Test B: real file deleted via native messaging host, independently verified gone"
+    },
+    "native_host_install_cost": {
+      "value": "3 HKCU reg keys + 1 manifest + 2 host files, no admin; cleanup = delete keys + files (demonstrated, zero trace)"
+    },
+    "dc_remote_mcp": {
+      "tier": "beta",
+      "free": "10,000 tool calls/month",
+      "pro": "$20/mo",
+      "sandbox": "NOT a sandbox per its own SECURITY.md (July 2026); guardrails advisory"
+    },
+    "cws_review": {
+      "value": "up to weeks for sensitive permissions (nativeMessaging); --load-extension removed from Chrome stable since 137"
+    }
+  },
+  "results": [
+    {
+      "architecture": "electron",
+      "total": 89,
+      "detail": [
+        {
+          "criterion": "capability",
+          "weight": 25,
+          "raw": 100,
+          "weighted": 25,
+          "evidence": "Node main process: fs, registry, services, scheduled tasks natively; self-delete pattern probe-proven"
+        },
+        {
+          "criterion": "install_friction",
+          "weight": 15,
+          "raw": 90,
+          "weighted": 13.5,
+          "evidence": "1 step: download + run; SmartScreen warning on unsigned exe is the only friction"
+        },
+        {
+          "criterion": "reliability",
+          "weight": 15,
+          "raw": 90,
+          "weighted": 13.5,
+          "evidence": "zero external dependencies; no browser/network/service needed"
+        },
+        {
+          "criterion": "ai_iteration",
+          "weight": 15,
+          "raw": 90,
+          "weighted": 13.5,
+          "evidence": "measured cold start 150ms -> edit+restart+verify ~2-4s; HMR available"
+        },
+        {
+          "criterion": "dev_effort",
+          "weight": 10,
+          "raw": 80,
+          "weighted": 8,
+          "evidence": "one codebase, electron-builder; packaging+signing is days"
+        },
+        {
+          "criterion": "distribution",
+          "weight": 10,
+          "raw": 75,
+          "weighted": 7.5,
+          "evidence": "direct download, no store review; signing cert ~$100-500/yr; AV FP risk for uninstaller-like exes"
+        },
+        {
+          "criterion": "footprint",
+          "weight": 5,
+          "raw": 60,
+          "weighted": 3,
+          "evidence": "measured 330MB RAM total, ~250MB disk"
+        },
+        {
+          "criterion": "cost",
+          "weight": 5,
+          "raw": 100,
+          "weighted": 5,
+          "evidence": "free, no service dependency"
+        }
+      ]
+    },
+    {
+      "architecture": "hybrid",
+      "total": 85.5,
+      "detail": [
+        {
+          "criterion": "capability",
+          "weight": 25,
+          "raw": 100,
+          "weighted": 25,
+          "evidence": "Electron core does the job; extension is optional sidekick"
+        },
+        {
+          "criterion": "install_friction",
+          "weight": 15,
+          "raw": 85,
+          "weighted": 12.75,
+          "evidence": "same single-step install; extension optional"
+        },
+        {
+          "criterion": "reliability",
+          "weight": 15,
+          "raw": 85,
+          "weighted": 12.75,
+          "evidence": "product never depends on the extension working"
+        },
+        {
+          "criterion": "ai_iteration",
+          "weight": 15,
+          "raw": 95,
+          "weighted": 14.25,
+          "evidence": "both loops measured: extension 763ms + electron 150ms restart"
+        },
+        {
+          "criterion": "dev_effort",
+          "weight": 10,
+          "raw": 60,
+          "weighted": 6,
+          "evidence": "two surfaces to build and keep in sync"
+        },
+        {
+          "criterion": "distribution",
+          "weight": 10,
+          "raw": 70,
+          "weighted": 7,
+          "evidence": "electron direct + extension optional (store review only if shipped)"
+        },
+        {
+          "criterion": "footprint",
+          "weight": 5,
+          "raw": 60,
+          "weighted": 3,
+          "evidence": "same as electron when extension idle"
+        },
+        {
+          "criterion": "cost",
+          "weight": 5,
+          "raw": 95,
+          "weighted": 4.75,
+          "evidence": "free core; AI costs identical across all three"
+        }
+      ]
+    },
+    {
+      "architecture": "extension_dc",
+      "total": 66,
+      "detail": [
+        {
+          "criterion": "capability",
+          "weight": 25,
+          "raw": 95,
+          "weighted": 23.75,
+          "evidence": "DC runs PowerShell = full OS reach, but gated on DC service availability + auth"
+        },
+        {
+          "criterion": "install_friction",
+          "weight": 15,
+          "raw": 40,
+          "weighted": 6,
+          "evidence": "extension install (dev-mode warning or CWS review) + DC account/auth or local DC install + native host registration"
+        },
+        {
+          "criterion": "reliability",
+          "weight": 15,
+          "raw": 45,
+          "weighted": 6.75,
+          "evidence": "browser must run; DC remote is BETA with 10k calls/mo cap; network+auth deps; DC is NOT a sandbox per its own SECURITY.md"
+        },
+        {
+          "criterion": "ai_iteration",
+          "weight": 15,
+          "raw": 95,
+          "weighted": 14.25,
+          "evidence": "measured 763ms verify loop, no app restart needed"
+        },
+        {
+          "criterion": "dev_effort",
+          "weight": 10,
+          "raw": 50,
+          "weighted": 5,
+          "evidence": "three moving parts (extension + bridge + cloud AI glue) + auth flow"
+        },
+        {
+          "criterion": "distribution",
+          "weight": 10,
+          "raw": 30,
+          "weighted": 3,
+          "evidence": "CWS review up to weeks for nativeMessaging; unpacked = dev-mode banner; enterprise policy can block"
+        },
+        {
+          "criterion": "footprint",
+          "weight": 5,
+          "raw": 85,
+          "weighted": 4.25,
+          "evidence": "reuses the browser the user already runs; host is tiny"
+        },
+        {
+          "criterion": "cost",
+          "weight": 5,
+          "raw": 60,
+          "weighted": 3,
+          "evidence": "DC remote free 10k calls/mo, Pro $20/mo; local DC free but reintroduces install friction"
+        }
+      ]
+    }
+  ]
+}

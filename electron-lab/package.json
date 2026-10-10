@@ -1,0 +1,27 @@
+{
+  "name": "vanish-lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "dist": "electron-builder --win portable"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "dependencies": {},
+  "devDependencies": {
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.vanish.lab",
+    "productName": "vanish-lab",
+    "files": [
+      "dist/**/*"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

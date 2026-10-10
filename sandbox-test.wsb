@@ -1,0 +1,15 @@
+<Configuration>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>C:\Users\fvegi\.copilot\chats\2026-10-09\glowing-goggles-4d4b8f3a\vanish\electron-lab</HostFolder>
+      <ReadOnly>false</ReadOnly>
+    </MappedFolder>
+    <MappedFolder>
+      <HostFolder>C:\Users\fvegi\AppData\Local\mise\installs\node\24.21.0</HostFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+  <LogonCommand>
+    <Command>cmd /c start cmd /k C:\Users\wdagUtilityAccount\Desktop\electron-lab\sandbox-run.cmd</Command>
+  </LogonCommand>
+</Configuration>

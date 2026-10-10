@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Vanish OS Probe",
+  "version": "1.0.0",
+  "description": "Sandbox probe: what can a Chrome extension actually do to the OS?",
+  "permissions": ["nativeMessaging"],
+  "background": { "service_worker": "sw.js" },
+  "action": { "default_title": "Vanish probe" }
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+win-unpacked/
+*.exe
+ext-id.cache
+chrome-profile*/
+*.log
+sandbox-results.txt
+builder-debug.yml
+builder-effective-config.yaml

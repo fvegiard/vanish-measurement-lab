@@ -1,0 +1,17 @@
+{
+  "product": "zero-trace uninstaller for vibe coders (one icon, click, app never existed)",
+  "rubric_version": 1,
+  "criteria": [
+    { "id": "capability",       "weight": 25, "question": "Can it do 100% of the uninstall job (scan registry, delete files/services/tasks/env, no scanner traces)?" },
+    { "id": "install_friction", "weight": 15, "question": "User steps from download to working product?" },
+    { "id": "reliability",      "weight": 15, "question": "Failure modes and hard dependencies (browser running? network? third-party service? store review)?" },
+    { "id": "ai_iteration",     "weight": 15, "question": "How fast can a cloud AI edit -> reload -> verify a change (measured loop)?" },
+    { "id": "dev_effort",       "weight": 10, "question": "Time/complexity to MVP for a solo builder?" },
+    { "id": "distribution",     "weight": 10, "question": "Store review, AV false positives, signing risk?" },
+    { "id": "footprint",        "weight": 5,  "question": "Runtime RAM/disk on the user's PC (measured)?" },
+    { "id": "cost",             "weight": 5,  "question": "Ongoing service costs (API limits, subscriptions)?" }
+  ],
+  "architectures": ["electron", "hybrid", "extension_dc"],
+  "measurements": {},
+  "scores": {}
+}
