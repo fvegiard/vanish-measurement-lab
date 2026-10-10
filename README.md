@@ -8,6 +8,25 @@ This repo holds **how the architecture was chosen**: the rubric, the raw measure
 the scoring scripts, and every battery test. Every number below is reproducible on any
 Windows PC with the commands in [How to rerun](#how-to-rerun).
 
+## Design principles (Karpathy-aligned)
+
+The verdict isn't only numbers — it follows Karpathy's revealed preferences from primary
+sources (see [research](#key-technical-findings)):
+
+1. **CLI/API/Markdown over GUI.** "Don't ask a developer to visit, look, or click.
+   Instruct and empower their LLM." Vanish ships a CLI + Markdown docs so both humans
+   and AI agents drive it without touching a GUI.
+2. **Self-contained, zero-dependency.** "It has no other master. It just does the thing."
+   One portable exe: no accounts, no telemetry, no auto-updates, no third-party bridge
+   service, no extension-store review.
+3. **Simple stacks.** Electron + TypeScript, nothing else. No serverless multiverse, no
+   multi-service glue — the part Karpathy called "a painful slog as a deployed, real app".
+4. **The vibe-coding loop is the spec.** Copy-pasteable errors, fast re-runs, verify by
+   looking. The batteries in this repo measure exactly that loop (1.3 s extension,
+   ~0.8 s Electron) because that's the loop the product will be built and corrected in.
+5. **Zero trace is the artifact.** Like his calculator: install it and the system shows
+   no memory of it; uninstall it and no scanner can tell it was ever there.
+
 ## The question
 
 Three candidate architectures for a zero-trace uninstaller:
