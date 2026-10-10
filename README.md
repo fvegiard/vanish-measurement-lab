@@ -41,6 +41,32 @@ Project state is tracked two ways, per his [2026 pattern](https://gist.github.co
 His 2025 method was the anti-structure "append-and-review note"; by 2026 it evolved into
 the LLM Wiki: "Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase."
 
+## Vanish v0.1 (shipped)
+
+The app itself lives at [fvegiard/vanish](https://github.com/fvegiard/vanish) (commit `1d31c33`).
+
+**What it does:** scans for leftover version folders (`<app>\pkg\<platform>\<semver>` — keeps the highest, flags the rest) and orphan uninstall registry entries (candidate paths all missing), then deletes them. Dry-run by default; `clean --execute` applies. HKLM deletions are skipped (need elevation).
+
+**Measured:**
+
+| Metric | Number |
+|--------|--------|
+| Full-PC scan | **941 ms** (batched `reg query /s`, 7.4× vs per-key spawns) |
+| Packaged launch | **1.1–1.3 s** (9× vs portable's 11.2 s re-extraction) |
+| Distribution | **zip 155.3 MB**, unzip-and-run, no installer |
+| app.asar | **0.01 MB** (explicit files list; recursive self-packing fixed) |
+
+**Zero-trace proof:** temp userData per PID removed on quit; stale run-dirs from dead PIDs swept at startup (force-kill self-heals); verified 0 `vanish-run-*` dirs, no `%APPDATA%\Vanish`, 0 registry keys. Fixture-proven: planted findings detected, deleted, verified gone; real-PC scan returned 0 (correct — machine already clean).
+
+**Run it:**
+
+```
+Vanish.exe scan                          # dry-run, markdown report
+Vanish.exe scan --json                   # machine-readable
+Vanish.exe clean --execute               # apply deletions
+node dist\cli.js scan --root <dir>       # plain-Node CLI (no Electron)
+```
+
 ## The question
 
 Three candidate architectures for a zero-trace uninstaller:
