@@ -1,0 +1,31 @@
+{
+  "$schema": "vanish-graph-v1",
+  "description": "JSON graph tracking the Vanish project: nodes = decisions/components/findings/tasks, edges = dependencies. Machine-readable counterpart to the README (human side follows Karpathy's append-and-review style).",
+  "nodes": [
+    { "id": "decision-architecture", "type": "decision", "label": "Electron + TypeScript wins", "status": "decided", "data": { "score": 89.0, "methods": ["weighted-sum", "topsis-rubric", "topsis-equal", "ahp-rubric", "ahp-equal"], "runner_up": "hybrid 85.5", "rejected": "extension+dc 66.0" } },
+    { "id": "decision-distribution", "type": "decision", "label": "Portable vs NSIS unresolved", "status": "open", "data": { "question": "portable re-extracts 189MB every launch (11.2s); NSIS installs fast but leaves traces the product itself must remove" } },
+    { "id": "component-core", "type": "component", "label": "Vanish core (Electron main)", "status": "planned", "data": { "role": "fs/registry/services/tasks, scan + delete engine" } },
+    { "id": "component-native-host", "type": "component", "label": "Self-deleting native host", "status": "probe-proven", "data": { "pattern": "register HKCU -> work -> unregister -> self-delete = zero trace", "evidence": "probe Test B: real file deleted, verified gone" } },
+    { "id": "component-extension", "type": "component", "label": "Optional browser sidekick", "status": "deferred", "data": { "reason": "extension alone cannot reach OS (probe Test A); CWS review weeks for nativeMessaging" } },
+    { "id": "component-cli", "type": "component", "label": "CLI + Markdown docs", "status": "planned", "data": { "principle": "Karpathy: 'Don't ask a developer to visit, look, or click'" } },
+    { "id": "finding-portable-reextract", "type": "finding", "label": "Portable exe re-extracts every launch", "status": "measured", "data": { "runs_ms": [11208, 11193, 11157], "cause": "189MB payload to %TEMP% each run" } },
+    { "id": "finding-correction-loop", "type": "finding", "label": "Electron correction cycle 1.71s", "status": "measured", "data": { "detect_ms": 282, "fix_verify_ms": 267, "requirement": "process.on('uncaughtException') streams errors, no modal dialog" } },
+    { "id": "finding-loadunpacked", "type": "finding", "label": "Extensions.loadUnpacked CDP (Chrome 126+)", "status": "verified", "data": { "use": "AI iteration loop for any extension sidekick; no --load-extension flag" } },
+    { "id": "finding-karpathy", "type": "finding", "label": "Karpathy 2026: LLM Wiki pattern (markdown graph, not JSON)", "status": "verified", "data": { "sources": ["karpathy.bearblog.dev/sequoia-ascent-2026 (2026-04-30)", "gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"], "pattern": "persistent markdown wiki: entity pages + cross-links + index.md + append-only log.md; graph viewed in Obsidian graph view; lint passes for orphans/contradictions", "quote": "Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase" } },
+    { "id": "task-build-app", "type": "task", "label": "Build Vanish app", "status": "pending" },
+    { "id": "task-trace-model", "type": "task", "label": "Design per-app trace model (app -> files -> registry -> services graph)", "status": "pending" },
+    { "id": "task-cleanup-demo", "type": "task", "label": "Copilot version-cache cleanup", "status": "done", "data": { "reclaimed_mb": 1013.6, "kept": "1.0.94-3 (running)" } }
+  ],
+  "edges": [
+    { "from": "task-build-app", "to": "decision-architecture", "type": "depends_on" },
+    { "from": "task-build-app", "to": "decision-distribution", "type": "depends_on" },
+    { "from": "task-build-app", "to": "component-core", "type": "creates" },
+    { "from": "task-build-app", "to": "component-cli", "type": "creates" },
+    { "from": "component-core", "to": "finding-correction-loop", "type": "must_respect" },
+    { "from": "component-native-host", "to": "component-extension", "type": "enables" },
+    { "from": "component-extension", "to": "finding-loadunpacked", "type": "dev_loop_uses" },
+    { "from": "decision-distribution", "to": "finding-portable-reextract", "type": "informed_by" },
+    { "from": "decision-architecture", "to": "finding-karpathy", "type": "informed_by" },
+    { "from": "task-trace-model", "to": "component-core", "type": "feeds" }
+  ]
+}

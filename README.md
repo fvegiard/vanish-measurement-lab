@@ -27,6 +27,20 @@ sources (see [research](#key-technical-findings)):
 5. **Zero trace is the artifact.** Like his calculator: install it and the system shows
    no memory of it; uninstall it and no scanner can tell it was ever there.
 
+## Tracking (Karpathy 2026 LLM Wiki pattern)
+
+Project state is tracked two ways, per his [2026 pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+(presented at Sequoia Ascent 2026):
+
+- `graph.json` — machine layer: nodes (decisions/components/findings/tasks) + edges
+  (depends_on/enables/informed_by). The agent queries this to follow state.
+- `wiki/` — human layer: `index.md` (catalog with `[[cross-links]]`) + `log.md`
+  (append-only, grep-parseable `## [date] type | title` entries). Open the folder in
+  Obsidian to see the link graph — the same graph, in markdown form.
+
+His 2025 method was the anti-structure "append-and-review note"; by 2026 it evolved into
+the LLM Wiki: "Obsidian is the IDE; the LLM is the programmer; the wiki is the codebase."
+
 ## The question
 
 Three candidate architectures for a zero-trace uninstaller:
