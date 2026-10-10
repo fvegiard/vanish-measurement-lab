@@ -24,9 +24,78 @@
       ],
       "how": "Get-Process WorkingSet64 sum while app alive"
     },
+    "electron_dev_loop_ms": {
+      "compile": [
+        572,
+        615,
+        515
+      ],
+      "cold_start": [
+        147,
+        174,
+        163
+      ],
+      "total": [
+        719,
+        789,
+        678
+      ],
+      "result": "3/3 PASS",
+      "how": "loop-electron.js: esbuild -> spawn electron.exe -> parse COLD_START_MS"
+    },
+    "electron_correction_cycle_ms": {
+      "bug_compile": 604,
+      "bug_detect": 282,
+      "bug_error": "MAIN_ERROR: ReferenceError: bugVarNotDefined is not defined",
+      "fix_compile": 557,
+      "fix_verify": 267,
+      "total": 1710,
+      "how": "correction-electron.js with process.on('uncaughtException') handler streaming to stderr; dialog-free"
+    },
+    "electron_portable_build": {
+      "build_ms": 320709,
+      "exe_mb": 189.3,
+      "how": "electron-builder --win portable"
+    },
+    "electron_portable_launch_ms": {
+      "runs": [
+        11208,
+        11193,
+        11157
+      ],
+      "median": 11193,
+      "finding": "re-extracts 189MB payload to %TEMP% on EVERY launch (~11.2s); portable = zero-install but slow start",
+      "how": "Start-Process -Wait wall time minus 1500ms quit delay, 3 runs"
+    },
     "extension_verify_loop_ms": {
       "value": 763,
       "how": "CDP: open probe tab -> extension runs -> native host deletes real file -> result rendered; headless, browser already running"
+    },
+    "extension_ts_loop_ms": {
+      "compile": [
+        42,
+        47
+      ],
+      "reload": [
+        585
+      ],
+      "probe": [
+        680,
+        740
+      ],
+      "total": [
+        1263,
+        1324
+      ],
+      "result": "3/3 PASS",
+      "how": "loop-ext.js: esbuild -> Extensions.loadUnpacked reload -> cdp-test.js verify"
+    },
+    "extension_correction_cycle_ms": {
+      "bug_detect": 1430,
+      "bug_error": "Specified native messaging host not found",
+      "fix_verify": 1400,
+      "total": 2830,
+      "how": "injected connectNative('com.vanish.wrong') -> FAIL -> revert -> PASS"
     },
     "extension_direct_os_capability": {
       "value": "none",
@@ -47,6 +116,15 @@
     },
     "cws_review": {
       "value": "up to weeks for sensitive permissions (nativeMessaging); --load-extension removed from Chrome stable since 137"
+    },
+    "karpathy_research": {
+      "sources": [
+        "x.com/karpathy vibe-coding tweet 2025-02-02",
+        "karpathy.bearblog.dev/vibe-coding-menugen 2025-04-27",
+        "karpathy.bearblog.dev/i-love-calculator 2024-09-08",
+        "karpathy.bearblog.dev/power-to-the-people 2025-04-07"
+      ],
+      "verdict": "prefers CLI/API/Markdown over GUI, self-contained zero-dependency artifacts, simple stacks; no direct Electron/MCP statements found"
     }
   },
   "results": [
@@ -80,7 +158,7 @@
           "weight": 15,
           "raw": 90,
           "weighted": 13.5,
-          "evidence": "measured cold start 150ms -> edit+restart+verify ~2-4s; HMR available"
+          "evidence": "measured: dev loop 0.68-0.79s (compile+cold start), correction cycle 1.71s with precise stderr errors"
         },
         {
           "criterion": "dev_effort",
@@ -94,7 +172,7 @@
           "weight": 10,
           "raw": 75,
           "weighted": 7.5,
-          "evidence": "direct download, no store review; signing cert ~$100-500/yr; AV FP risk for uninstaller-like exes"
+          "evidence": "direct download, no store review; portable exe re-extracts 189MB every launch (~11.2s) — NSIS install or cached extraction is the fix; signing cert ~$100-500/yr; AV FP risk for uninstaller-like exes"
         },
         {
           "criterion": "footprint",

@@ -62,8 +62,8 @@ No method flips the ranking, including with equal weights.
 | Main process RSS | 93–95 MB | ✅ |
 | Portable build time | 320.7 s | ✅ built |
 | Portable exe size | 189.3 MB | ✅ |
-| Portable exe cold start | *pending — Windows Sandbox run* | ⏳ |
-| Correction cycle (bug→FAIL→fix→PASS) | FAIL detect 20.0 s (modal dialog blocked stderr; fixed with `uncaughtException` handler → re-measuring in sandbox), fix→PASS **288 ms** | ⏳ re-measuring |
+| Portable exe launch | **11.2 s every launch** (11208/11193/11157) — re-extracts the 189 MB payload to `%TEMP%` each run; fix: NSIS install or cached extraction dir | ✅ measured |
+| Correction cycle (bug→FAIL→fix→PASS) | **1.71 s total**: detect 282 ms with precise `MAIN_ERROR: ReferenceError: ...`, fix→PASS 267 ms (after adding `uncaughtException` handler; the modal dialog variant blocked 20 s) | ✅ 3/3 |
 
 ### Battery B — Extension TS edit→verify loop
 
@@ -79,7 +79,7 @@ No method flips the ranking, including with equal weights.
 | Architecture | Bug detect | Fix verify | Total |
 |---|---|---|---|
 | Extension | 1.43 s (precise: "Specified native messaging host not found") | 1.40 s | ~2.8 s |
-| Electron | 20.0 s (dialog-blocked; handler fix applied) | 0.29 s | re-measuring in sandbox |
+| Electron | 0.28 s (precise: `MAIN_ERROR: ReferenceError: ...`) | 0.27 s | **1.71 s** |
 
 ### Probe — the zero-trace mechanism (works, verified)
 
@@ -105,7 +105,11 @@ No method flips the ranking, including with equal weights.
 5. **Native messaging is the only sanctioned extension→OS bridge**; CWS review for
    `nativeMessaging` can take weeks. Desktop Commander's remote MCP is **not a sandbox**
    (per its own SECURITY.md) and adds a third-party trust surface.
-6. **Karpathy's revealed preferences** (researched, primary sources): CLI/API/Markdown
+6. **electron-builder portable re-extracts its payload on every launch** (~11.2 s for a
+   189 MB app, consistent across 3 runs). Portable = zero-install distribution, but the
+   product should either use an NSIS install (fast start, proper uninstaller — which is
+   literally the product's job) or a cached extraction dir.
+7. **Karpathy's revealed preferences** (researched, primary sources): CLI/API/Markdown
    surfaces over GUI ("Don't ask a developer to visit, look, or click"), self-contained
    zero-dependency artifacts ("I love calculator"), and browser-GUI glue as an
    LLM-unmanipulable bottleneck — all favor the portable single-exe over the
@@ -163,8 +167,10 @@ electron-lab/sandbox-run.cmd  in-sandbox test runner
 - [x] Battery B: extension loop 1.26–1.32 s, 3/3 PASS
 - [x] Battery C (extension): correction cycle ~2.8 s
 - [x] Battery A: portable build (189.3 MB, 320.7 s), dev loop 3/3 PASS
-- [ ] Battery A/C: portable exe + correction cycle inside Windows Sandbox
-- [ ] Final verdict doc with sandbox numbers
+- [x] Battery A/C (host): portable launch 11.2 s ×3, correction cycle 1.71 s
+- [x] Karpathy primary-source research (4 verified sources)
+- [ ] Optional: Windows Sandbox re-verification (kit included, `sandbox-test.wsb`)
+- [ ] Final verdict doc → product build
 
 ## Related
 
